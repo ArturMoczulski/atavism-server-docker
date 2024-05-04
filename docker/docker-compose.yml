@@ -1,0 +1,44 @@
+version: "3.8"
+
+name: atavism
+
+services:
+  db:
+    image: mysql:5.7
+    platform: linux/amd64
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./db/etc/mysql/mysql.conf.d/:/etc/mysql/mysql.conf.d
+      - ../sql/New_Install_with_Demo_Data/:/docker-entrypoint-initdb.d/
+      - ./db/docker-entrypoint-initdb.d/user_grants.sql:/docker-entrypoint-initdb.d/user_grants.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    networks:
+      - atavism
+
+  server:
+    image: openjdk:8
+    command: sh -c "/app/bin/start.sh"
+    ports:
+      - "5040-5060:5040-5060"
+      - "5040-5060:5040-5060/udp"
+      - "5090:5090"
+      - "9005-9010:9005-9010"
+      - "9005-9010:9005-9010/udp"
+      - "5566:5566"
+    networks:
+      - atavism
+    depends_on:
+      - db
+    volumes:
+      - ../.:/app
+      - ./atavism/app/bin/start.sh:/app/bin/start.sh
+
+networks:
+  atavism:
+    driver: bridge
+
+volumes:
+  db-data:

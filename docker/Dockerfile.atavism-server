@@ -1,0 +1,11 @@
+# Use Ubuntu 18.04 as the base image
+FROM openjdk:8
+
+# Accept MySQL credentials as build-time arguments
+ARG MYSQL_ROOT_PASSWORD
+ARG MYSQL_DATABASE
+ARG MYSQL_USER
+ARG MYSQL_PASSWORD
+ARG MYSQL_HOST
+
+WORKDIR /app

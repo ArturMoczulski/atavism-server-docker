@@ -1,0 +1,5 @@
+bin/.jython_cache
+run
+logs
+sql/**/user_grants.sql
+bin/start.sh
